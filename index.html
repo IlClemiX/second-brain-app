@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- La pagina puo' parlare solo con GitHub: nessun altro sito, nessun codice esterno. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src https://api.github.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Second Brain</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Second Brain">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1f6f5c">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <h1 id="top-title">Second Brain</h1>
+  <button id="btn-refresh" class="icon-btn" type="button" aria-label="Aggiorna" title="Aggiorna">&#8635;</button>
+  <a id="btn-settings" class="icon-btn" href="#impostazioni" aria-label="Impostazioni" title="Impostazioni">&#9881;</a>
+</header>
+
+<main id="main">
+
+  <!-- Collegamento / impostazioni -->
+  <section id="view-settings" class="view" hidden>
+    <div class="card">
+      <h2 id="settings-title">Collega il tuo vault</h2>
+      <p class="muted">Serve una sola volta per dispositivo. La chiave resta salvata solo qui, su questo dispositivo, e viene inviata soltanto a GitHub.</p>
+      <label for="in-repo">Repository</label>
+      <input id="in-repo" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="utente/nome-repository">
+      <label for="in-token">Chiave d'accesso di GitHub</label>
+      <input id="in-token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_...">
+      <p class="muted small">Deve valere solo per questo repository, con permesso "Contents: Read and write".</p>
+      <button id="btn-connect" class="primary" type="button">Collega</button>
+      <button id="btn-disconnect" class="danger" type="button" hidden>Scollega questo dispositivo</button>
+      <p id="settings-msg" class="msg" role="status"></p>
+    </div>
+  </section>
+
+  <!-- In corso -->
+  <section id="view-hot" class="view" hidden>
+    <div id="status-card" class="card status"></div>
+    <article id="hot-body" class="card note"></article>
+  </section>
+
+  <!-- Nuova nota -->
+  <section id="view-new" class="view" hidden>
+    <div class="card">
+      <label for="in-title">Titolo</label>
+      <input id="in-title" type="text" autocomplete="off" placeholder="Di cosa si tratta?">
+      <label for="in-text">Testo</label>
+      <textarea id="in-text" rows="9" placeholder="Scrivi o detta la nota..."></textarea>
+      <div class="attach-row">
+        <label for="in-files" class="btn">&#128206; Allega foto o documenti</label>
+        <input id="in-files" type="file" multiple class="visually-hidden">
+      </div>
+      <ul id="attach-list" class="attach-list"></ul>
+      <button id="btn-save" class="primary" type="button">Salva nel vault</button>
+      <p id="new-msg" class="msg" role="status"></p>
+      <p class="muted small">La nota va in <b>00 Inbox</b>. Gli allegati vanno in <b>_allegati</b>.</p>
+    </div>
+  </section>
+
+  <!-- Elenco note -->
+  <section id="view-notes" class="view" hidden>
+    <input id="in-search" type="search" autocomplete="off" placeholder="Cerca nelle note...">
+    <p id="search-info" class="muted small"></p>
+    <div id="notes-list"></div>
+  </section>
+
+  <!-- Una nota -->
+  <section id="view-note" class="view" hidden>
+    <a class="back" href="#note">&larr; Note</a>
+    <p id="note-path" class="muted small"></p>
+    <article id="note-body" class="card note"></article>
+  </section>
+
+</main>
+
+<nav class="tabs" id="tabs">
+  <a href="#hot" data-tab="hot"><span class="ti">&#128293;</span>In corso</a>
+  <a href="#nuova" data-tab="new"><span class="ti">&#9998;</span>Nuova nota</a>
+  <a href="#note" data-tab="notes"><span class="ti">&#128218;</span>Note</a>
+</nav>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
