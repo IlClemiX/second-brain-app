@@ -678,11 +678,13 @@ function shrinkImage(file) {
   });
 }
 
-async function addFiles(fileList) {
+async function addFiles(fileList, fromCamera) {
   const files = Array.from(fileList);
   for (const file of files) {
     if (file.size > MAX_FILE_BYTES) { toast(file.name + ': troppo grande (massimo 15 MB)'); continue; }
     let name = file.name || 'allegato';
+    /* Lo scatto arriva con un nome generico (image.jpg): meglio "foto". */
+    if (fromCamera) name = 'foto' + (extOf(name) ? '.' + extOf(name) : '.jpg');
     let bytes = null;
     const isPhoto = /^image\//.test(file.type) && !/gif|svg/.test(file.type);
     if (isPhoto) {
@@ -801,6 +803,9 @@ $('in-title').addEventListener('input', saveDraft);
 $('in-text').addEventListener('input', saveDraft);
 $('in-search').addEventListener('input', onSearch);
 $('in-files').addEventListener('change', (ev) => { addFiles(ev.target.files).then(() => { ev.target.value = ''; }); });
+$('in-camera').addEventListener('change', (ev) => { addFiles(ev.target.files, true).then(() => { ev.target.value = ''; }); });
+/* Il pulsante della fotocamera compare solo dove il browser la apre davvero (telefono e tablet). */
+if ('capture' in $('in-camera')) $('lbl-camera').hidden = false;
 $('main').addEventListener('click', (ev) => {
   const a = ev.target.closest('a');
   if (!a) return;
